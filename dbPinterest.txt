@@ -1,0 +1,110 @@
+--nguoi_dung
+CREATE TABLE nguoi_dung(
+	nguoi_dung_id INT PRIMARY KEY AUTO_INCREMENT,
+	email VARCHAR(255),
+	mat_khau VARCHAR(255),
+	ho_ten VARCHAR(255),
+	tuoi INT,
+	anh_dai_dien VARCHAR(255)
+)
+
+INSERT INTO nguoi_dung (email, mat_khau, ho_ten, tuoi, anh_dai_dien)
+SELECT
+    CONCAT('user', id, '@example.com'),
+    MD5(RAND()),
+    CONCAT('Người Dùng ', id),
+    FLOOR(RAND() * 30) + 18,
+    CONCAT('avatar', FLOOR(RAND() * 10) + 1, '.jpg')
+FROM (
+    SELECT (a.N + b.N * 10 + c.N * 100) AS id
+    FROM
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
+    LIMIT 30 
+) AS numbers;
+
+SELECT * FROM nguoi_dung
+
+--hinh_anh
+CREATE TABLE hinh_anh(
+ hinh_id INT PRIMARY KEY,
+ ten_hinh VARCHAR(255),
+ duong_dan VARCHAR(255),
+ mo_ta VARCHAR(255),
+ nguoi_dung_id INT,
+ FOREIGN KEY (nguoi_dung_id) REFERENCES nguoi_dung(nguoi_dung_id)
+)
+ALTER TABLE hinh_anh
+MODIFY COLUMN hinh_id INT AUTO_INCREMENT;
+
+INSERT INTO hinh_anh (ten_hinh, duong_dan, mo_ta, nguoi_dung_id)
+SELECT
+    CONCAT('Hình ', id),
+    CONCAT('/images/', id, '.jpg'),
+    CONCAT('Mô tả cho hình ', id),
+    FLOOR(RAND() * 30) + 1
+FROM (
+    SELECT (a.N + b.N * 10 + c.N * 100) AS id
+    FROM
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
+    LIMIT 30
+) AS numbers;
+
+SELECT * FROM hinh_anh
+
+--binh_luan
+
+CREATE TABLE binh_luan(
+	binh_luan_id INT PRIMARY KEY auto_increment,
+	ngay_binh_luan DATE,
+	noi_dung VARCHAR(255),
+	nguoi_dung_id INT,
+	FOREIGN KEY (nguoi_dung_id) REFERENCES nguoi_dung(nguoi_dung_id),
+	hinh_id INT,
+	FOREIGN KEY (hinh_id) REFERENCES hinh_anh(hinh_id)
+)
+INSERT INTO binh_luan (ngay_binh_luan, noi_dung, nguoi_dung_id, hinh_id)
+SELECT
+    DATE_ADD('2023-01-01', INTERVAL id DAY) AS ngay_binh_luan,
+    CONCAT('Nội dung bình luận ', id) AS noi_dung,
+    FLOOR(RAND() * 30) + 1 AS nguoi_dung_id,
+    FLOOR(RAND() * 30) + 1 AS hinh_id
+FROM (
+    SELECT (a.N + b.N * 10 + c.N * 100) AS id
+    FROM
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
+    LIMIT 30
+) AS numbers;
+
+SELECT * FROM binh_luan
+
+--luu_anh
+CREATE TABLE luu_anh(
+	luu_anh_id INT PRIMARY KEY auto_increment,
+	nguoi_dung_id INT,
+	FOREIGN KEY (nguoi_dung_id) REFERENCES nguoi_dung(nguoi_dung_id),
+	hinh_id INT,
+	FOREIGN KEY (hinh_id) REFERENCES hinh_anh(hinh_id),
+	ngay_luu DATE
+)
+
+INSERT INTO luu_anh (nguoi_dung_id, hinh_id, ngay_luu)
+SELECT
+    FLOOR(RAND() * 30) + 1 AS nguoi_dung_id,
+    FLOOR(RAND() * 30) + 1 AS hinh_id,
+    DATE_ADD('2023-01-01', INTERVAL id DAY) AS ngay_luu
+FROM (
+    SELECT (a.N + b.N * 10 + c.N * 100) AS id
+    FROM
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) a,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) b,
+        (SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c
+    LIMIT 30
+) AS numbers;
+
+SELECT * FROM luu_anh 
