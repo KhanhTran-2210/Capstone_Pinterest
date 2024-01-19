@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import rootRoutes from "./src/routes/rootRoutes";
+import rootRoutes from "./src/routes/rootRoutes.js";
 
 const app = express();
 const port = 8082;
