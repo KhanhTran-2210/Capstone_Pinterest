@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { createToken } from "../config/jwt.js";
 
 const prisma = new PrismaClient();
 
@@ -31,5 +32,31 @@ const signup = async (req, res) => {
     res.status(500).send(`Error: ${error}`);
   }
 };
+const login = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    let data = await prisma.nguoi_dung.findFirst({
+      where: {
+        email,
+      },
+    });
+    if (data) {
+      let checkPassword = bcrypt.compareSync(password, data.mat_khau);
+      if (checkPassword) {
+        let payload = {
+          user_id: data.nguoi_dung_id,
+        };
+        let token = createToken(payload);
+        res.status(200).send(token);
+      } else {
+        res.status(400).send("Password incorrect!");
+      }
+    } else {
+      res.status(404).send("Log-in fail");
+    }
+  } catch (error) {
+    res.send(`Error: ${error}`);
+  }
+};
 
-export { signup };
+export { signup, login };
