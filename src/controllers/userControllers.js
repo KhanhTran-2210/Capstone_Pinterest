@@ -31,5 +31,13 @@ const updateUser = async (req, res) => {
     res.status(500).send(`Error: ${error}`);
   }
 };
+// POST thêm một ảnh của user.
+const uploadMulterImg = async (req, res) => {
+  try {
+    res.send(req.files);
+  } catch (error) {
+    res.status(500).send(`Error: ${error}`);
+  }
+};
 
-export { updateUser };
+export { updateUser, uploadMulterImg };
