@@ -1,15 +1,8 @@
 import express from "express";
-import { getlistPhoto } from "../controllers/homeController.js";
-
-
-
-
+import { getListByName, getlistPhoto } from "../controllers/homeController.js";
 
 const homeRoutes = express();
-homeRoutes.get("/getlistPhoto",getlistPhoto)
-
-
-
-
+homeRoutes.get("/get-list-photo", getlistPhoto);
+homeRoutes.get("/search", getListByName);
 
 export default homeRoutes;

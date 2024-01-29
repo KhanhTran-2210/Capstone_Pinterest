@@ -6,6 +6,12 @@ const prisma = new PrismaClient();
 const updateUser = async (req, res) => {
   try {
     let userId = parseInt(req.params.userId, 10);
+    const existingUser = await prisma.nguoi_dung.findMany({
+      where: { nguoi_dung_id: userId },
+    });
+    if (existingUser.length === 0) {
+      return res.status(404).send(`User with ID ${userId} not found`);
+    }
     let { email, password, name, age, avt } = req.body;
     let checkUser = await prisma.nguoi_dung.findFirst({
       where: { nguoi_dung_id: userId },
@@ -32,9 +38,9 @@ const updateUser = async (req, res) => {
   }
 };
 // POST thêm một ảnh của user.
-const uploadMulterImg = async (req, res) => {
+const uploadMulterImg = (req, res) => {
   try {
-    res.send(req.files);
+    res.send(req.file);
   } catch (error) {
     res.status(500).send(`Error: ${error}`);
   }

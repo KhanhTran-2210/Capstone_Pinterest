@@ -14,5 +14,6 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
+  console.log(process.cwd());
   console.log(`BE starting with port ${port}`);
 });

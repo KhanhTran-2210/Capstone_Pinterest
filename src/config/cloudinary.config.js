@@ -13,8 +13,8 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   allowedFormats: ["jpg", "png"],
-  filename: (req, file, callback) => {
-    callback(null, file.originalname);
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
   },
 });
 

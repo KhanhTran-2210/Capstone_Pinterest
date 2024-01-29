@@ -60,15 +60,15 @@ const getCreatedImg = async (req, res) => {
 //DELETE xóa ảnh đã tạo theo id ảnh
 const deleteImg = async (req, res) => {
   try {
-    let imgId = req.params.imgId;
+    let imgId = parseInt(req.params.imgId, 10);
     const existingImg = await prisma.hinh_anh.findUnique({
-      where: { hinh_id: +imgId },
+      where: { hinh_id: imgId },
       include: {
         binh_luan: true,
         luu_anh: true,
       },
     });
-    if (!existingImg) {
+    if (existingImg.length === 0) {
       return res.status(404).send(`Image with ID ${imgId} not found`);
     }
     const binhLuanIds = existingImg.binh_luan.map((bl) => bl.binh_luan_id);
